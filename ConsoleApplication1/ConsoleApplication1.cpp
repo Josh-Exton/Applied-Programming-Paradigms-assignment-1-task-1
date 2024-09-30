@@ -7,20 +7,26 @@ using namespace std;
 string CaesarCipher(string text, int encryptionFlag, int key)
 {
     bool error = false;
+    // checks to see if the encryption flag is in range
     if (encryptionFlag < 0 || encryptionFlag > 1)
     {
+        // sets the error flag to on since the encryption flag is out of range
         error = true;
         cout << "Please set the encryption flag to 0 for encrypting or 1 for decrypting ";
     }
 
-    if (key < 0 || key > 26)
+    // checks to see if the key is in range
+    if (key < 0 || key > 25)
     {
+        // sets the error flag to on since the key is out of range
         error = true;
-        cout << "Please set key between 0 and 26 ";
+        cout << "Please set key between 0 and 25 ";
     }
 
+    // checks if the error flag is false
     if (error == true)
     {
+        // ends function since one of the parameters is out of range
         cout << "\n";
         return text;
     }
@@ -29,30 +35,29 @@ string CaesarCipher(string text, int encryptionFlag, int key)
     {
         if (encryptionFlag == 0)
         {
-            text[i] = text[i] + key;
-            int val = (int)text[i];
-            cout << text[i] << val << "\n";
-            if ((text[i] > 90 && text[i] < 97) || text[i] > 122)
+            // had to convert it to an integer value because the max askii value is 127 and if go above it I can't subtract 26 anymore
+            int val = (int)text[i] + key;
+            // val > 90 is to check for the to capital overflow and the val > 122 is for the lower case overflow
+            // val <= 115 and key >= 7 is to check that it belong to the capital set since it is overlapping with the lowercase set
+            // if ((val > 90 && ((val <= 115 && key >= 7) || (val < 97 && key < 7))) || val > 122)
+            if (val > 90)
             {
-                text[i] = text[i] - 26;
+                val = val - 26;
             }
-
-            val = (int)text[i];
-            cout << text[i] << " " << val;
-
+            text[i] = val;
         }
 
         else if (encryptionFlag == 1)
         {
             text[i] = text[i] - key;
-            if (text[i] < 65)
+            if (text[i] < 65 || text[i])
             {
                 text[i] = text[i] + 26;
             }
         }
     }
 
-    // cout << text << "\n";
+    cout << text << "\n";
     return text;
 }
 
@@ -64,7 +69,7 @@ int main()
     string test3 = CaesarCipher("abcxyz", 0, 8);
     string test4 = CaesarCipher("cdezab", 1, 2);
     */
-    string test1 = CaesarCipher("z", 0, 4);
+    string test1 = CaesarCipher("z", 0, 25);
     return 0;
 }
 
