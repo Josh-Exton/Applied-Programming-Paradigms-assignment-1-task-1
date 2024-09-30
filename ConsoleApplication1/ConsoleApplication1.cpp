@@ -4,30 +4,67 @@
 #include <iostream>
 using namespace std;
 
-string CaesarCipher(string text, int val, int key)
+string CaesarCipher(string text, int encryptionFlag, int key)
 {
+    bool error = false;
+    if (encryptionFlag < 0 || encryptionFlag > 1)
+    {
+        error = true;
+        cout << "Please set the encryption flag to 0 for encrypting or 1 for decrypting ";
+    }
+
+    if (key < 0 || key > 26)
+    {
+        error = true;
+        cout << "Please set key between 0 and 26 ";
+    }
+
+    if (error == true)
+    {
+        cout << "\n";
+        return text;
+    }
+
     for (int i = 0; i < text.length(); i++)
     {
-        if (val == 0)
+        if (encryptionFlag == 0)
         {
             text[i] = text[i] + key;
+            int val = (int)text[i];
+            cout << text[i] << val << "\n";
+            if ((text[i] > 90 && text[i] < 97) || text[i] > 122)
+            {
+                text[i] = text[i] - 26;
+            }
+
+            val = (int)text[i];
+            cout << text[i] << " " << val;
+
         }
-        else if (val == 1)
+
+        else if (encryptionFlag == 1)
         {
             text[i] = text[i] - key;
+            if (text[i] < 65)
+            {
+                text[i] = text[i] + 26;
+            }
         }
     }
 
-    cout << text << "\n";
+    // cout << text << "\n";
     return text;
 }
 
 int main()
 {
+    /*
     string test1 = CaesarCipher("hello", 0, 1);
     string test2 = CaesarCipher("ifmmp", 1, 1);
-    string test3 = CaesarCipher("abcxyz", 0, 2);
+    string test3 = CaesarCipher("abcxyz", 0, 8);
     string test4 = CaesarCipher("cdezab", 1, 2);
+    */
+    string test1 = CaesarCipher("z", 0, 4);
     return 0;
 }
 
