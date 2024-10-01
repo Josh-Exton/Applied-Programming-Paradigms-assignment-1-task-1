@@ -35,17 +35,22 @@ string CaesarCipher(string text, int encryptionFlag, int key)
     // looping through each character in the text
     for (int i = 0; i < text.length(); i++)
     {
+        // catches any non letters and skips it to prevent it from changing
+        if (text[i] < 65 || (text[i] > 90 && text[i] < 97) || text[i] > 122)
+        {
+            continue;
+        }
+
         // encrypting
-        if (encryptionFlag == 0)
+        else if (encryptionFlag == 0)
         {
             // adding the key to the ascii value
             // had to convert it to an integer value because the max ascii value is 127 and if go above it I can't subtract 26 anymore because it overflows
             int asciiVal = (int)text[i] + key;
             // this if statement is for checking if ascii value goes beyond 90 (Z) or 122 (z)
             // asciiVal > 90 is to check for the to capital overflow and the asciiVal > 122 is for the lower case overflow
-            // asciiVal <= 115 and key >= 7 is to check that it belong to the capital set since it is overlapping with the lowercase set
-            // asciiVal < 97 && key < 7 is to cover the remaiming scenarios since they are not covered otherwise
-            if ((asciiVal > 90 && ((asciiVal <= 115 && key >= 7) || (asciiVal < 97 && key < 7))) || asciiVal > 122)
+            // since text[i] is currently unchanged I can check to see if it is orginally from the capital set by using text[i] <= 90 so the lower case set doesn't get affected
+            if ((asciiVal > 90 && text[i] <= 90) || asciiVal > 122)
             {
                 // subtract 26 to get to the correct ascii value since there is 26 letters in the alphabet
                 asciiVal = asciiVal - 26;
@@ -55,15 +60,16 @@ string CaesarCipher(string text, int encryptionFlag, int key)
         }
 
         // decrypting
-        else if (encryptionFlag == 1)
+        else
         {
+            // getting the value before it changes
+            char unchanged = text[i];
             // subtracting ascii value to the key
             text[i] = text[i] - key;
             // this if statement is for checking if ascii value goes before 65 (A) or 97 (a)
             // asciiVal < 65 is to check for the to capital ? and the asciiVal < 97 is for the lower case ?
-            // asciiVal >= 72 and key >= 7 is to check that it belong to the lower case set since it is overlapping with the capital set
-            // asciiVal > 90 && key < 7 is to cover the remaiming scenarios since they are not covered otherwise
-            if (text[i] < 65 || (text[i] < 97 && ((text[i] >= 72 && key >= 7) || (text[i] > 90 && key < 7))))
+            // i check to see if the original value is from the lower case set by using unchanged >= 97 so the upper case set doesnt get affected
+            if (text[i] < 65 || (text[i] < 97 && unchanged >= 97))
             {
                 // add 26 to get to the correct ascii value since there is 26 letters in the alphabet
                 // changing the character of the text
@@ -99,4 +105,5 @@ int main()
 //   4. Use the Error List window to view errors
 //   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
 //   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+
 
