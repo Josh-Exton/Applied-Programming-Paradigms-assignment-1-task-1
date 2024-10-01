@@ -6,6 +6,7 @@ using namespace std;
 
 string CaesarCipher(string text, int encryptionFlag, int key)
 {
+    // creating my error flag
     bool error = false;
     // checks to see if the encryption flag is in range
     if (encryptionFlag < 0 || encryptionFlag > 1)
@@ -31,45 +32,60 @@ string CaesarCipher(string text, int encryptionFlag, int key)
         return text;
     }
 
+    // looping through each character in the text
     for (int i = 0; i < text.length(); i++)
     {
+        // encrypting
         if (encryptionFlag == 0)
         {
-            // had to convert it to an integer value because the max askii value is 127 and if go above it I can't subtract 26 anymore
-            int val = (int)text[i] + key;
-            // val > 90 is to check for the to capital overflow and the val > 122 is for the lower case overflow
-            // val <= 115 and key >= 7 is to check that it belong to the capital set since it is overlapping with the lowercase set
-            // if ((val > 90 && ((val <= 115 && key >= 7) || (val < 97 && key < 7))) || val > 122)
-            if (val > 90)
+            // adding the key to the ascii value
+            // had to convert it to an integer value because the max ascii value is 127 and if go above it I can't subtract 26 anymore because it overflows
+            int asciiVal = (int)text[i] + key;
+            // this if statement is for checking if ascii value goes beyond 90 (Z) or 122 (z)
+            // asciiVal > 90 is to check for the to capital overflow and the asciiVal > 122 is for the lower case overflow
+            // asciiVal <= 115 and key >= 7 is to check that it belong to the capital set since it is overlapping with the lowercase set
+            // asciiVal < 97 && key < 7 is to cover the remaiming scenarios since they are not covered otherwise
+            if ((asciiVal > 90 && ((asciiVal <= 115 && key >= 7) || (asciiVal < 97 && key < 7))) || asciiVal > 122)
             {
-                val = val - 26;
+                // subtract 26 to get to the correct ascii value since there is 26 letters in the alphabet
+                asciiVal = asciiVal - 26;
             }
-            text[i] = val;
+            // changing the character of the text
+            text[i] = asciiVal;
         }
 
+        // decrypting
         else if (encryptionFlag == 1)
         {
+            // subtracting ascii value to the key
             text[i] = text[i] - key;
-            if (text[i] < 65 || text[i])
+            // this if statement is for checking if ascii value goes before 65 (A) or 97 (a)
+            // asciiVal < 65 is to check for the to capital ? and the asciiVal < 97 is for the lower case ?
+            // asciiVal >= 72 and key >= 7 is to check that it belong to the lower case set since it is overlapping with the capital set
+            // asciiVal > 90 && key < 7 is to cover the remaiming scenarios since they are not covered otherwise
+            if (text[i] < 65 || (text[i] < 97 && ((text[i] >= 72 && key >= 7) || (text[i] > 90 && key < 7))))
             {
+                // add 26 to get to the correct ascii value since there is 26 letters in the alphabet
+                // changing the character of the text
                 text[i] = text[i] + 26;
             }
         }
     }
-
-    cout << text << "\n";
+    // returning the text
     return text;
 }
 
 int main()
 {
-    /*
     string test1 = CaesarCipher("hello", 0, 1);
+    cout << test1 << "\n";
     string test2 = CaesarCipher("ifmmp", 1, 1);
-    string test3 = CaesarCipher("abcxyz", 0, 8);
+    cout << test2 << "\n";
+    string test3 = CaesarCipher("abcxyz", 0, 2);
+    cout << test3 << "\n";
     string test4 = CaesarCipher("cdezab", 1, 2);
-    */
-    string test1 = CaesarCipher("z", 0, 25);
+    cout << test4 << "\n";
+
     return 0;
 }
 
@@ -83,3 +99,4 @@ int main()
 //   4. Use the Error List window to view errors
 //   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
 //   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+
