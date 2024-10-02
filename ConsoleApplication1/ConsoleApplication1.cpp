@@ -6,14 +6,15 @@ using namespace std;
 
 string CaesarCipher(string text, int encryptionFlag, int key)
 {
-    // creating my error flag
+    // creating my error flag and error message
     bool error = false;
+    string errorMessage;
     // checks to see if the encryption flag is in range
     if (encryptionFlag < 0 || encryptionFlag > 1)
     {
         // sets the error flag to on since the encryption flag is out of range
         error = true;
-        cout << "Please set the encryption flag to 0 for encrypting or 1 for decrypting ";
+        errorMessage = errorMessage + "Please set the encryption flag to 0 for encrypting or 1 for decrypting. ";
     }
 
     // checks to see if the key is in range
@@ -21,15 +22,14 @@ string CaesarCipher(string text, int encryptionFlag, int key)
     {
         // sets the error flag to on since the key is out of range
         error = true;
-        cout << "Please set key between 0 and 25 ";
+        errorMessage = errorMessage + "Please set key between 0 and 25. ";
     }
 
     // checks if the error flag is false
     if (error == true)
     {
         // ends function since one of the parameters is out of range
-        cout << "\n";
-        return text;
+        return errorMessage;
     }
 
     // looping through each character in the text
